@@ -5,6 +5,8 @@ module.exports = function( grunt ) {
   //
   // https://github.com/cowboy/grunt/blob/master/docs/getting_started.md
   //
+  grunt.loadNpmTasks('grunt-contrib-ember');
+
   grunt.initConfig({
 
     // Project configuration
@@ -19,14 +21,25 @@ module.exports = function( grunt ) {
     coffee: {
       compile: {
         files: {
-          'temp/scripts/*.js': 'app/scripts/**/*.coffee' 
+          'temp/scripts/*.js': 'app/scripts/**/*.coffee'
         },
         options: {
           basePath: 'app/scripts'
         }
       }
     },
-
+    ember_handlebars: {
+      compile: {
+        options: {
+          templateName: function(filename) {
+            return filename.replace(/app\/scripts\/templates\//, '');
+          }
+        },
+        files: {
+          "app/scripts/compiled-templates/templates.js": ["app/scripts/templates/**/*.hbs", "app/scripts/templates/**/*.handlebars"]
+        }
+      }
+    },
     // compile .scss/.sass to .css using Compass
     compass: {
       dist: {
@@ -68,9 +81,14 @@ module.exports = function( grunt ) {
           'app/*.html',
           'app/styles/**/*.css',
           'app/scripts/**/*.js',
+          'app/scripts/handlebars/**/*.js',
           'app/images/**/*'
         ],
         tasks: 'reload'
+      },
+      handlebars: {
+        files: [ 'app/scripts/templates/**/*.handlebars', 'app/scripts/templates/**/*.hbs' ],
+        tasks: 'ember_handlebars reload'
       }
     },
 
