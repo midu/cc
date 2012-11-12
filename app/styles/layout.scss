@@ -1,0 +1,6 @@
+@import "bourbon/bourbon";
+@import "neat/neat";
+
+#competitions {
+  @include outer-container;
+}
